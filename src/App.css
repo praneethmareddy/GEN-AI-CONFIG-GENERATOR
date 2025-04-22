@@ -1,6 +1,6 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
  
   text-align: center;
 }
@@ -42,12 +42,14 @@
 }
 .greet{
   
-  font-size: 1.5rem;
+  font-size: 1rem;
   color:#2c5282;
-  font-weight: 1.5rem;
+  font-weight: 1.3rem;
 }
-.greet span{
-  background: -webkit-linear-gradient(16deg,#4b90ff,#ff5546);
+.greet span {
+  background: -webkit-linear-gradient(16deg, #80c7ff, #1e3a8a); /* Light blue to dark blue */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+

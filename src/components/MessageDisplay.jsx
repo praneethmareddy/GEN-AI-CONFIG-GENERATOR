@@ -6,6 +6,8 @@ import {
   useColorMode,
   useToast,
   VStack,
+  IconButton,
+  Flex
 } from '@chakra-ui/react';
 import ReactMarkdown from 'react-markdown';
 import { CopyIcon, CheckIcon } from '@chakra-ui/icons';
@@ -24,10 +26,15 @@ const MessageDisplay = ({ message }) => {
     navigator.clipboard.writeText(codeText);
     setCopiedBlock(index);
     toast({
-      title: 'Code copied!',
-      status: 'success',
+      title: 'Message copied!',
+      status: 'success', // This will use the success status by default
       duration: 2000,
       isClosable: true,
+      // containerStyle: {
+      //   background: 'linear-gradient(to right,rgb(89, 145, 243), #1e40af)', // Custom gradient
+      //   color: 'white', // White text color
+      // },
+      position: 'bottom', // Optional, to make it appear at the bottom of the screen
     });
     setTimeout(() => setCopiedBlock(null), 2000);
   };
@@ -37,12 +44,19 @@ const MessageDisplay = ({ message }) => {
     setCopiedMessage(true);
     toast({
       title: 'Message copied!',
-      status: 'success',
+      status: 'success', // This will use the success status by default
       duration: 2000,
       isClosable: true,
+      // containerStyle: {
+      //   background: 'linear-gradient(to right,rgb(89, 145, 243), #1e40af)', // Custom gradient
+      //   color: 'white', // White text color
+      // },
+      position: 'bottom', // Optional, to make it appear at the bottom of the screen
     });
+  
     setTimeout(() => setCopiedMessage(false), 2000);
   };
+  
 
   const renderMarkdown = (text) => {
     let blockIndex = -1;
@@ -67,6 +81,7 @@ const MessageDisplay = ({ message }) => {
                   borderWidth="1px"
                   borderColor={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
                   w="full"
+                  _hover={{ boxShadow: 'lg' }}
                 >
                   <Box
                     as="pre"
@@ -89,18 +104,19 @@ const MessageDisplay = ({ message }) => {
                       {children}
                     </Code>
                   </Box>
-                  <Button
+                  <IconButton
                     position="absolute"
                     top={2}
                     right={2}
-                    size="xs"
+                    size="sm"
+                    icon={copiedBlock === blockIndex ? <CheckIcon /> : <CopyIcon />}
                     onClick={() => handleCopyCode(codeText, blockIndex)}
                     variant="ghost"
                     colorScheme="teal"
                     aria-label="Copy code"
-                  >
-                    {copiedBlock === blockIndex ? <CheckIcon /> : <CopyIcon />}
-                  </Button>
+                    _hover={{ transform: 'scale(1.2)' }}
+                    display="none" // Hide by default
+                  />
                 </Box>
               );
             }
@@ -148,23 +164,34 @@ const MessageDisplay = ({ message }) => {
 
   return (
     <Box position="relative" w="full">
-      <Button
-        size="xs"
-        variant="ghost"
-        position="absolute"
-        top={1}
-        right={1}
-        colorScheme="blue"
-        onClick={handleCopyMessage}
-        aria-label="Copy message"
-      >
-        {copiedMessage ? <CheckIcon /> : <CopyIcon />}
-      </Button>
-
+    {/* Hover-sensitive wrapper */}
+    <Box
+      position="relative"
+      _hover={{ '.copy-btn': { display: 'inline-flex' } }}
+    >
       <VStack align="start" spacing={4} width="full">
         {renderMarkdown(message)}
       </VStack>
+  
+      <IconButton
+        className="copy-btn"
+        size="xs"
+        variant="ghost"
+        icon={copiedMessage ? <CheckIcon /> : <CopyIcon />}
+        onClick={handleCopyMessage}
+        aria-label="Copy message"
+        colorScheme="blue"
+        position="absolute"
+        top={2}
+        right="-10px" // Position outside the right edge
+        display="none"
+        _hover={{ transform: 'scale(1.1)' }}
+      />
     </Box>
+  </Box>
+  
+  
+
   );
 };
 

@@ -3,13 +3,13 @@ import { extendTheme } from "@chakra-ui/react";
 const theme = extendTheme({
   config: { initialColorMode: "light", useSystemColorMode: false },
   fonts: {
-    body: "'Outfit', sans-serif", // Apply Outfit font globally
-    heading: "'Outfit', sans-serif",
+    heading: "'Rubik', sans-serif", // Use Rubik for headings
+    body: "'Rubik', sans-serif",    // Use Rubik for body text
   },
   styles: {
     global: {
       body: {
-        fontFamily: "'Outfit', sans-serif",
+        fontFamily:  "'Rubik', sans-serif",
       },
       "::-webkit-scrollbar": {
         width: "8px",
@@ -22,6 +22,22 @@ const theme = extendTheme({
       },
     },
   },
+  components: {
+    Toast: {
+      baseStyle: {
+        container: {
+          bg: 'linear-gradient(to right,rgb(140, 161, 196), #1e40af)', // Custom gradient background
+          color: 'white', // Text color
+        },
+      },
+      variants: {
+        solid: {
+          bg: 'linear-gradient(to right,rgb(140, 161, 196), #1e40af)', // Custom gradient background for solid variant
+          color: 'white', // Text color for solid variant
+        },
+      },
+    },
+  }
 });
 
 export default theme;

@@ -1,54 +1,64 @@
-import { SimpleGrid, Box, Text, Image } from "@chakra-ui/react";
+import { SimpleGrid, Box, Text, useColorModeValue } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { FiSearch } from "react-icons/fi"; // Feather Search Icon
+
+const MotionBox = motion(Box);
+const MotionIcon = motion(FiSearch);
 
 const SampleQuestions = ({ onClick }) => {
   const sampleQuestions = [
-    "How do you create a responsive navbar using CSS and JavaScript?",
-    "What is the difference between React and Angular?",
-    "How does Chakra UI simplify development?",
-    "Tell me a joke!",
+    "Give me Telus CIQ",
+    "Give me global-master-ne-template",
+    "Update telus 22.A.0 template to 22.A.1",
+    "Get me a global master Template",
   ];
 
+  const cardGradient = useColorModeValue(
+    "linear(to-r, #3182CE, #63B3ED)",
+    "linear(to-r, #2C5282, #2A4365)"
+  );
+
   return (
-    <SimpleGrid
-      columns={{ base: 1, sm: 2, md: 2 }}
-      spacing={{ base: 2, sm: 3, md: 4 }} // Dynamic spacing based on screen size
-      mt={4}
-      className="main cards"
-    >
+    <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} mt={4}>
       {sampleQuestions.map((question, index) => (
-        <Box
+        <MotionBox
           key={index}
-          className="card"
-          bg="#f0f4f9"
-          borderRadius="10px"
-          p={4}
+          bgGradient={cardGradient}
+          borderRadius="lg"
+          p={3}
           cursor="pointer"
           position="relative"
-          height={{ base: "3rem", sm: "4rem", md: "5rem" }} // Dynamic height
-          _hover={{ bg: "#dfe4ea" }}
+          height="4.5rem"
+          overflow="hidden"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          _hover={{
+            transform: "scale(1.03)",
+            boxShadow: "lg",
+          }}
+          transition="all 0.3s ease-in-out"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           onClick={() => onClick(question)}
         >
-          <Text
-            fontSize={{ base: "14px", sm: "16px", md: "17px" }} // Dynamic font size
-            color="#585858"
-            mb={2}
-            isTruncated // Truncate text with "..." if it overflows
-          >
+          <Text fontSize="sm" fontWeight="medium" color="white" isTruncated>
             {question}
           </Text>
-          <Image
-            src="./search.png" // Sample icon
-            alt="Question Icon"
-            w={{ base: 4, sm: 5, md: 6 }} // Dynamic size
-            h={{ base: 4, sm: 5, md: 6 }}
-            position="absolute"
-            bottom="10px"
-            right="10px"
-            borderRadius="20px"
-            bg="white"
-            p="5px"
+
+          <MotionIcon
+            size="24px"
+            color="#3182CE"
+            style={{
+              background: "#fff",
+              borderRadius: "50%",
+              padding: "6px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+            }}
+            animate={{ rotate: [0, 15, -15, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
           />
-        </Box>
+        </MotionBox>
       ))}
     </SimpleGrid>
   );

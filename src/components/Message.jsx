@@ -1,11 +1,15 @@
-import { Box, HStack, Icon, Text, useColorMode } from "@chakra-ui/react";
+import { Box, HStack, Icon, Text, useColorMode , useColorModeValue} from "@chakra-ui/react";
 import { FaUser, FaRobot } from "react-icons/fa";
 import MessageDisplay from "./MessageDisplay";
 import ReactMarkdown from "react-markdown";
 const Message = ({ message = "", isUser = false }) => {
   const { colorMode } = useColorMode(); // Get the current theme mode
   const isDark = colorMode === "dark";
-
+  const messageGradient = useColorModeValue(
+    // "linear(to-r, blue.600, blue.400)",
+    "linear(to-r, blue.400, blue.300)"
+  );
+  
   // Shared styles for message box
   const messageBoxStyles = {
     px: 4,
@@ -30,10 +34,11 @@ const Message = ({ message = "", isUser = false }) => {
             boxSize={5}
             color={isDark ? "blue.300" : "blue.500"}
             aria-label="Bot Icon"
+            
           />
           <Box
-            bg={isDark ? "gray.600" : "gray.200"}
-            color={isDark ? "gray.100" : "black"}
+             bg={isDark ? "gray.600" : "gray.200"}
+           color={isDark ? "gray.100" : "black"}
             {...messageBoxStyles}
           >
             <MessageDisplay message={message}/>
@@ -47,7 +52,7 @@ const Message = ({ message = "", isUser = false }) => {
       {isUser && (
         <>
           <Box
-            bg={isDark ? "blue.400" : "blue.500"}
+           bgGradient={messageGradient}
             color="white"
             {...messageBoxStyles}
           >
@@ -56,7 +61,8 @@ const Message = ({ message = "", isUser = false }) => {
           <Icon
             as={FaUser}
             boxSize={5}
-            color={isDark ? "green.300" : "green.500"}
+            
+            color={isDark ? "blue.300" : "blue.500"}
             aria-label="User Icon"
           />
         </>

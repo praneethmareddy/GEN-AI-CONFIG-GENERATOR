@@ -88,6 +88,7 @@ const App = () => {
   
   
 
+
   const onLoadConversation = (index) => {
     saveChatToHistory(); // Save the current chat if it exists
     const selectedConversation = conversationHistory[index];
@@ -113,7 +114,7 @@ const App = () => {
           p={4}
           bg="gray.50"
           borderRadius="md"
-          minH="70vh"
+          minH="60vh"
           maxH="70vh"
         >
           {!messages.length && !loading ? (
