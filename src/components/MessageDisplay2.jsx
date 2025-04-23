@@ -13,7 +13,6 @@ import {
   useColorMode,
   useToast,
   useColorModeValue,
-  Flex,
 } from "@chakra-ui/react";
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons";
 
@@ -43,11 +42,11 @@ const MessageDisplay2 = ({ message }) => {
   const { colorMode } = useColorMode();
   const toast = useToast();
   const [copied, setCopied] = useState(false);
-  const isDark = colorMode === "dark";
 
   const cardBg = useColorModeValue("white", "gray.700");
-  const tableHeaderBg = useColorModeValue("gray.100", "gray.600");
+  const tableHeaderBg = useColorModeValue("gray.50", "gray.600");
   const borderColor = useColorModeValue("gray.200", "gray.600");
+  const scrollThumb = useColorModeValue("gray.300", "gray.500");
 
   const handleCopy = () => {
     navigator.clipboard.writeText(message);
@@ -66,36 +65,45 @@ const MessageDisplay2 = ({ message }) => {
 
   return (
     <Box position="relative" w="full">
-      <Box _hover={{ '.copy-config-btn': { display: 'inline-flex' } }}>
-        <VStack align="stretch" spacing={4}>
+      <Box _hover={{ '.copy-config-btn': { display: 'inline-flex' } }} position="relative">
+        <VStack align="stretch" spacing={3} pt={2} pb={1}>
           {sections.map((sec, idx) => (
             <Box
               key={idx}
               borderWidth="1px"
               borderColor={borderColor}
-              borderRadius="xl"
-              p={4}
+              borderRadius="lg"
+              p={3}
               bg={cardBg}
-              boxShadow="md"
+              boxShadow="base"
               overflowX="auto"
+              sx={{
+                "&::-webkit-scrollbar": {
+                  height: "6px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: scrollThumb,
+                  borderRadius: "10px",
+                },
+              }}
             >
               <Text
-                fontSize="lg"
-                fontWeight="bold"
-                color="blue.500"
-                mb={3}
+                fontSize="sm"
+                fontWeight="semibold"
+                color="blue.400"
+                mb={2}
+                pb={1}
                 borderBottom="1px solid"
                 borderColor={borderColor}
-                pb={1}
               >
                 @{sec.section}
               </Text>
 
-              <Table variant="striped" size="sm" w="full">
+              <Table variant="simple" size="sm" w="full">
                 <Thead bg={tableHeaderBg}>
                   <Tr>
                     {sec.headers.map((h, i) => (
-                      <Th key={i} fontSize="sm">{h}</Th>
+                      <Th key={i} fontSize="xs" py={1}>{h}</Th>
                     ))}
                   </Tr>
                 </Thead>
@@ -103,7 +111,7 @@ const MessageDisplay2 = ({ message }) => {
                   {sec.rows.map((row, rIdx) => (
                     <Tr key={rIdx}>
                       {row.map((val, cIdx) => (
-                        <Td key={cIdx} fontSize="sm">{val || "-"}</Td>
+                        <Td key={cIdx} fontSize="xs" py={1}>{val || "-"}</Td>
                       ))}
                     </Tr>
                   ))}
@@ -113,7 +121,7 @@ const MessageDisplay2 = ({ message }) => {
           ))}
         </VStack>
 
-        {/* Copy Button (Entire Message) */}
+        {/* Copy Button - positioned outside first section */}
         <IconButton
           icon={copied ? <CheckIcon /> : <CopyIcon />}
           aria-label="Copy config"
@@ -122,8 +130,8 @@ const MessageDisplay2 = ({ message }) => {
           colorScheme="blue"
           className="copy-config-btn"
           position="absolute"
-          top={2}
-          right={-2}
+          top="-10px"
+          right="-8px"
           display="none"
           _hover={{ transform: "scale(1.1)" }}
           onClick={handleCopy}
