@@ -1,0 +1,42 @@
+import { Box, Text, useMediaQuery } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+
+// Turn Text into animated components
+const MotionText = motion(Text);
+
+const Greetings = () => {
+  const [isSmallScreen] = useMediaQuery("(max-width: 768px)");
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      textAlign="center"
+      px={2}
+      py={2}
+    >
+      <MotionText
+        fontSize={isSmallScreen ? "12px" : "16px"}
+        my="2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+      >
+        <span>Hello, mate</span>
+      </MotionText>
+
+      <MotionText
+        fontSize={isSmallScreen ? "11px" : "15px"}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+      >
+        Ask our Gen-AI config generator to provide the perfect configuration
+      </MotionText>
+    </Box>
+  );
+};
+
+export default Greetings;
