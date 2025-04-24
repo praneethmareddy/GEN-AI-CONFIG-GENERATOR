@@ -1,20 +1,53 @@
-# Backend Server Setup
+```markdown
+# Backend Server Setup Guide
 
-This guide explains how to set up and run the backend server using either a remote LLM (Samsung-GAP) or a local LLM via Ollama.
-
----
-
-## Prerequisites
-
+## Requirements
 - Python 3.x
-- `pip` package manager
-- [Ollama](https://ollama.com/) installed (for local LLM)
+- Ollama (for local LLM)
+- pip package manager
 
----
+## Setup Instructions
 
-## Step-by-Step Instructions
-
-### 1. Navigate to the Backend Directory
-
+1. **Install Dependencies**  
 ```bash
 cd Backend
+pip install -r requirements.txt
+```
+
+2. **Download LLM Models** (Choose one)  
+```bash
+ollama pull llam3
+# OR
+ollama pull deepseek-r1
+```
+
+## Running the Server
+
+### Standard Execution
+- **Remote LLM (Samsung-GAP):**
+```bash
+python3 app.py
+```
+
+- **Local LLM Configuration:**
+```bash
+python3 app_local.py
+```
+
+### Special Case (Server IP: 70.1.1.109)
+```bash
+cd praneeth/rag
+# For remote LLM
+python3 app.py
+
+# For local LLM
+python3 app_local.py
+```
+
+## Important Notes
+- Keep Ollama service running for local LLM operations
+- Ensure firewall allows port access for remote connections
+- Verify model downloads with `ollama list` before starting local LLM
+```
+
+Simply copy this entire content into a `README.md` file.
