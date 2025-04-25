@@ -24,7 +24,7 @@ ollama pull deepseek-r1
 ## Running the Server
 
 ### Standard Execution
-- **Remote LLM (Samsung-GAP):**
+- **Remote LLM :**
 ```bash
 python3 app.py
 ```
@@ -34,7 +34,7 @@ python3 app.py
 python3 app_local.py
 ```
 
-### Special Case (Server IP: 70.1.1.109)
+### Special Case 
 ```bash
 cd praneeth/rag
 # For remote LLM
