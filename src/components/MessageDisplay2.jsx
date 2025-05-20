@@ -1,3 +1,4 @@
+// components/MessageDisplay2.tsx
 import React, { useState } from "react";
 import {
   Box,
@@ -9,20 +10,27 @@ import {
   Th,
   Td,
   VStack,
+  Stack,
   IconButton,
   useColorMode,
   useToast,
   useColorModeValue,
+  Divider,
 } from "@chakra-ui/react";
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons";
 
-const parseTemplate = (raw) => {
-  const lines = raw.trim().split("\n").map(line => line.trim()).filter(Boolean);
-  const sections = [];
-  let current = null;
+type Section = {
+  section: string;
+  headers: string[];
+  rows: string[][];
+};
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+const parseTemplate = (raw: string): Section[] => {
+  const lines = raw.trim().split("\n").map(line => line.trim()).filter(Boolean);
+  const sections: Section[] = [];
+  let current: Section | null = null;
+
+  for (const line of lines) {
     if (line.startsWith("@")) {
       if (current) sections.push(current);
       current = { section: line.slice(1), headers: [], rows: [] };
@@ -38,13 +46,12 @@ const parseTemplate = (raw) => {
   return sections;
 };
 
-const MessageDisplay2 = ({ message }) => {
-  const { colorMode } = useColorMode();
-  const toast = useToast();
+const MessageDisplay2 = ({ message }: { message: string }) => {
   const [copied, setCopied] = useState(false);
+  const toast = useToast();
 
-  const cardBg = useColorModeValue("white", "gray.700");
-  const tableHeaderBg = useColorModeValue("gray.50", "gray.600");
+  const bgColor = useColorModeValue("white", "gray.700");
+  const headerBg = useColorModeValue("gray.50", "gray.600");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const scrollThumb = useColorModeValue("gray.300", "gray.500");
 
@@ -52,11 +59,11 @@ const MessageDisplay2 = ({ message }) => {
     navigator.clipboard.writeText(message);
     setCopied(true);
     toast({
-      title: "Configuration copied!",
+      title: "Configuration copied",
       status: "success",
       duration: 2000,
       isClosable: true,
-      position: "bottom",
+      position: "bottom-right",
     });
     setTimeout(() => setCopied(false), 2000);
   };
@@ -65,17 +72,19 @@ const MessageDisplay2 = ({ message }) => {
 
   return (
     <Box position="relative" w="full">
-      <Box _hover={{ '.copy-config-btn': { display: 'inline-flex' } }} position="relative">
-        <VStack align="stretch" spacing={3} pt={2} pb={1}>
-          {sections.map((sec, idx) => (
+      <VStack spacing={4} align="stretch">
+        {sections.length === 0 ? (
+          <Text color="gray.500" fontStyle="italic">No sections found.</Text>
+        ) : (
+          sections.map((sec, idx) => (
             <Box
               key={idx}
               borderWidth="1px"
               borderColor={borderColor}
               borderRadius="lg"
-              p={3}
-              bg={cardBg}
-              boxShadow="base"
+              p={4}
+              bg={bgColor}
+              boxShadow="md"
               overflowX="auto"
               sx={{
                 "&::-webkit-scrollbar": {
@@ -92,51 +101,52 @@ const MessageDisplay2 = ({ message }) => {
                 fontWeight="semibold"
                 color="blue.400"
                 mb={2}
-                pb={1}
                 borderBottom="1px solid"
                 borderColor={borderColor}
+                pb={1}
               >
                 @{sec.section}
               </Text>
 
-              <Table variant="simple" size="sm" w="full">
-                <Thead bg={tableHeaderBg}>
-                  <Tr>
-                    {sec.headers.map((h, i) => (
-                      <Th key={i} fontSize="xs" py={1}>{h}</Th>
-                    ))}
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {sec.rows.map((row, rIdx) => (
-                    <Tr key={rIdx}>
-                      {row.map((val, cIdx) => (
-                        <Td key={cIdx} fontSize="xs" py={1}>{val || "-"}</Td>
+              {sec.headers.length > 0 && sec.rows.length > 0 ? (
+                <Table variant="simple" size="sm" w="full">
+                  <Thead bg={headerBg}>
+                    <Tr>
+                      {sec.headers.map((h, i) => (
+                        <Th key={i} fontSize="xs" py={1}>{h}</Th>
                       ))}
                     </Tr>
+                  </Thead>
+                  <Tbody>
+                    {sec.rows.map((row, rIdx) => (
+                      <Tr key={rIdx}>
+                        {row.map((val, cIdx) => (
+                          <Td key={cIdx} fontSize="xs" py={1}>{val || "-"}</Td>
+                        ))}
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              ) : (
+                <Stack spacing={1}>
+                  {sec.rows.flat().map((line, i) => (
+                    <Text fontSize="sm" key={i}>{line}</Text>
                   ))}
-                </Tbody>
-              </Table>
+                </Stack>
+              )}
             </Box>
-          ))}
-        </VStack>
-
-        {/* Copy Button - positioned outside first section */}
-        <IconButton
-          icon={copied ? <CheckIcon /> : <CopyIcon />}
-          aria-label="Copy config"
-          size="sm"
-          variant="ghost"
-          colorScheme="blue"
-          className="copy-config-btn"
-          position="absolute"
-          top="-10px"
-          right="-8px"
-          display="none"
-          _hover={{ transform: "scale(1.1)" }}
-          onClick={handleCopy}
-        />
-      </Box>
+          ))
+        )}
+        <Box textAlign="right">
+          <IconButton
+            aria-label="Copy message"
+            icon={copied ? <CheckIcon /> : <CopyIcon />}
+            colorScheme="blue"
+            size="sm"
+            onClick={handleCopy}
+          />
+        </Box>
+      </VStack>
     </Box>
   );
 };
